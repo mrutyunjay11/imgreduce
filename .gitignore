@@ -1,0 +1,11 @@
+.venv/
+vendor/wheels/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+reduced/
+.DS_Store
+

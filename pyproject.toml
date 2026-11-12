@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "imgreduce"
+version = "0.1.0"
+description = "100% offline, security-hardened, Apple Silicon-optimized image size reducer"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "pillow>=11.0.0",
+]
+
+[project.scripts]
+imgreduce = "imgreduce.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/imgreduce"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

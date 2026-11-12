@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ "$SOURCE" != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+REPO_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+
+VENV_BIN="$REPO_DIR/.venv/bin/imgreduce"
+WHEEL_DIR="$REPO_DIR/vendor/wheels"
+
+if [ -x "$VENV_BIN" ]; then
+  exec "$VENV_BIN" "$@"
+fi
+
+if ! command -v uv >/dev/null 2>&1; then
+  echo "Error: 'uv' is required to bootstrap .venv on first run." >&2
+  exit 1
+fi
+
+if [ -d "$WHEEL_DIR" ] && [ -n "$(ls -A "$WHEEL_DIR" 2>/dev/null || true)" ]; then
+  uv venv "$REPO_DIR/.venv" --no-managed-python --quiet 2>/dev/null || uv venv "$REPO_DIR/.venv" --quiet
+  uv pip install --python "$REPO_DIR/.venv/bin/python" --no-index --find-links "$WHEEL_DIR" imgreduce --quiet
+else
+  uv sync --project "$REPO_DIR" --no-managed-python --no-dev --offline --quiet 2>/dev/null \
+    || uv sync --project "$REPO_DIR" --no-managed-python --no-dev --quiet 2>/dev/null \
+    || uv sync --project "$REPO_DIR" --no-dev --quiet
+fi
+
+exec "$VENV_BIN" "$@"
