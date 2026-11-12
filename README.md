@@ -8,13 +8,13 @@
 Run immediately without cloning or manually installing the repository:
 
 ```bash
-uvx --from git+https://github.com/Mrutyunjay2005/imgreduce imgreduce ./photos
+uvx --from git+https://github.com/mrutyunjay11/imgreduce imgreduce ./photos
 ```
 
 Once cached on your Mac, run completely offline anytime:
 
 ```bash
-uvx --offline --from git+https://github.com/Mrutyunjay2005/imgreduce imgreduce ./photos
+uvx --offline --from git+https://github.com/mrutyunjay11/imgreduce imgreduce ./photos
 ```
 
 ### Option B: Run locally from this folder (`./reduce`)
